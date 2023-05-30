@@ -1,4 +1,4 @@
-# P5_TXT_WOO
+# P5 by TXT
 
 * Shreya Roy : PM
 * Justin Mohabir : tbd
