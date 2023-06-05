@@ -11,24 +11,43 @@ app = Flask(__name__)#ls, static_url_path = '/static')
 
 app.secret_key = b64.base64_encode("secret key in b64 lol")
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def home_page():
-    return render_template('login.html')
-
+    if 'username' in session:
+        return redirect('/home')
+    else:
+        return render_template('login.html')
+        
+@app.route("/login", methods=['GET', 'POST'])
+def authenticate():
+    if (request.method == "POST"):
+        session['username'] = request.form.get('username')
+        session['password'] - request.form.get('password')
+        if(user_exists(request.form['username'], request.form['password'])):
+            return redirect('/home_page')
+        else:
+            return render_template('login.html', exception = "Wrong username or password")
+    else:
+        if(session != {}):
+            return redirect("/home")
+        else:
+            return render_template('login.html')
+    
+    
 @app.route('/register')
-def home_page():
+def register():
     return render_template('register.html')
 
-@app.route('/homepage')
-def home_page():
-    return render_template('homepage.html')
+#@app.route('/homepage')
+#def homepage():
+#    return render_template('homepage.html')
 
 @app.route('/leaderboard')
-def home_page():
+def leaderboard():
     return render_template('leaderboard.html')
 
 @app.route('/games')
-def home_page():
+def games():
     return render_template('games.html')
 
 if __name__ == '__main__':
