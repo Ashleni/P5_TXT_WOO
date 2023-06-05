@@ -9,6 +9,29 @@ def wipe_db():
     c = db.cursor()
     c.execute("DROP TABLE if exists authentication")
 
+def creationist(): #wipe then create the leaderboard
+    db = sqlite3.connect(DB_FILE, check_same_thread=False)
+    c = db.cursor()
+    c.execute("DROP TABLE if exists authentication")
+    c.execute("CREATE TABLE IF NOT EXISTS leaderB (id TEXT, owner TEXT NOT NULL, connections INTEGER, answer INTEGER, points INTEGER)")
+    db.close()
+
+def update_owner(id, newOwner, column):
+    try:
+        db = sqlite3.connect(DB_FILE, check_same_thread=False)
+        c = db.cursor()
+        if (column == "owner"):
+            results = e.execute() # select new owner connections
+            results = e.execute("SELECT owner, connections from leaderB WHERE id = ?", (id,)).fetchall()
+            print(results)
+            results = results[1] - 1
+            c.execute("UPDATE leaderB set connections = ? WHERE owner = ?". (results[1], results[0]))
+            c.execute("UPDATE leaderB SET owner = ? WHERE id = ?", (newOwner, id,))
+            c.execute("UPDATE leaderB connections ")
+
+    except: 
+        print("error!")
+
 def user_exists(username):
     db = sqlite3.connect(DB_FILE, check_same_thread=False)
     c = db.cursor()
