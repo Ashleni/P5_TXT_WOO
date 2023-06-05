@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title> LOGIN PAGE </title>
+  </head>
+
+  <body>
+    <h1>
+      Welcome, Travelers of the Intertoobz!
+      <hr>
+    </h1>
+
+
+    <h3>
+      Enter your username & password below to proceed.
+    </h3>
+    <form action= "/login" method="POST">
+      <p> Username </p>
+      <input type="text" name="username" placeholder= "Enter your username">
+      <p> Password </p>
+      <input type="password" name="password" placeholder= "Enter your password">
+      <input title = "Submit" type="submit">
+    </form>
+
+
+    <h2>
+      {{exception}}
+    <h2>
+
+    <h3>
+      Don't have an account? <br>
+      <form action ="/register">
+    	  <input title = "Create Account" type="submit" value="Signup Here"/>
+    	</form>
+    </h3>
+  </body>
+
+</html>

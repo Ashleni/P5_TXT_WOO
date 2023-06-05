@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+
+<html>
+
+  <head>
+    <title>Register Page</title>
+  </head>
+
+  <body>
+    <h1>
+      Create New account
+      <hr>
+      <h2>
+        {{exception}}
+      </h2>
+    </h1>
+
+      <form action= "/register" method="POST">
+        <p> Username </p>
+      <input type="text" name="username" placeholder= "Enter your username">
+      <p> Password </p>
+      <input type="password" name="password1" placeholder= "Enter your passwod">
+      <p> Retype password</p>
+      <input type="password" name="password2" placeholder= "Confirm your password">
+
+        <input title = "Submit" type="submit" name="sub1">
+      </form>
+
+    <h2>
+      Already have an account?
+    </h2>
+    <form action ="/login">
+      <input title = "Login" type="submit" value="Login"/>
+    </form>
+  <body>
+</html>
