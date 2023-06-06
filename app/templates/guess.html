@@ -1,0 +1,28 @@
+<html>
+
+  <head>
+    <title> GUESS PAGE </title>
+  </head>
+
+  <body>
+    <h1>
+      Welcome, Travelers of the Intertoobz!
+      <br>
+      Team TXT
+    </h1>
+
+
+    <h3>
+      Guess da numba.
+    </h3>
+    <form action="/guess" method="post">
+      <input type="text" name="user_number">
+      <input type="submit" name="sub1">
+    </form>
+    {{right_or_wrong}} <br>
+    {{attempts_message}}
+    <br>
+    <a href='/home'> home </a>
+  </body>
+
+</html>

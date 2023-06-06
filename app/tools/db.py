@@ -25,11 +25,11 @@ def update_owner(id, newOwner, column):
             results = e.execute("SELECT owner, connections from leaderB WHERE id = ?", (id,)).fetchall()
             print(results)
             results = results[1] - 1
-            c.execute("UPDATE leaderB set connections = ? WHERE owner = ?". (results[1], results[0]))
+            c.execute("UPDATE leaderB set connections = ? WHERE owner = ?", (results[1], results[0]))
             c.execute("UPDATE leaderB SET owner = ? WHERE id = ?", (newOwner, id,))
             c.execute("UPDATE leaderB connections ")
 
-    except: 
+    except:
         print("error!")
 
 def user_exists(username):
