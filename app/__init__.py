@@ -2,7 +2,7 @@ from flask import Flask, render_template, session, request, redirect
 from tools import b64
 from tools import db
 from random import randrange
-
+import json
 
 # importing blueprints
 # from routes.home import home_bp
@@ -51,7 +51,32 @@ def logout():
 
 @app.route('/leaderboard')
 def leaderboard():
-    return render_template('leaderboard.html')
+    results = db.government_drone()
+    print(results)
+    return render_template('leaderboard.html', results = results)
+
+@app.route('/leaderboard_setup', methods = ['GET', 'POST'])
+def leaderboard_setup():
+    if request.method == 'GET':
+        results = db.government_drone()
+        clean_res = []
+        for result in results:
+            clean_res.append(result[0])
+        return json.dumps(clean_res)
+    else:
+        return '400'
+
+@app.route('/info/<id>', methods = ['GET', 'POST'])
+def info(id):
+    if request.method == 'GET':
+        results = db.alien_spaceship(id)
+        print (results)
+        clean_res = []
+        for result in results[0]:
+            clean_res.append(result)
+        return json.dumps(clean_res)
+    else:
+        return '400'
 
 @app.route('/games')
 def games():
