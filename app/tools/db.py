@@ -72,8 +72,8 @@ def update_owner(id, newOwner, column): # column needs to be set as "owner"
         db = sqlite3.connect(DB_FILE, check_same_thread=False)
         c = db.cursor()
         if (column == "owner"):
-            results_0 = e.execute("SELECT connections from leaderB WHERE owner = ?", (newOwner,)).fetchall() # select new owner connections
-            results = e.execute("SELECT owner, connections from leaderB WHERE id = ?", (id,)).fetchall() # select old owner connections
+            results_0 = c.execute("SELECT connections from leaderB WHERE owner = ?", (newOwner,)).fetchall() # select new owner connections
+            results = c.execute("SELECT owner, connections from leaderB WHERE id = ?", (id,)).fetchall() # select old owner connections
             # print(results)
             loser = results[1] - 1
             winner = results_0[0] + 1
@@ -150,15 +150,15 @@ def top_spaces():
     results = c.execute("SELECT username, spaces FROM authentication ORDER BY spaces DESC").fetchall()
     return results
 
-wipe_db()
-print(add_user('billybob','billybobrules'))
-print(login_user('billybob','billybobrules'))
-print(get_user_spaces('billybob'))
-add_space('billybob')
-print(add_user('billybob2','billybobrules'))
-print(add_user('billybob3','billybobrules'))
-add_space('billybob3')
-add_space('billybob3')
-print(top_spaces())
-creationism()
-government_drone()
+# wipe_db()
+# print(add_user('billybob','billybobrules'))
+# print(login_user('billybob','billybobrules'))
+# print(get_user_spaces('billybob'))
+# add_space('billybob')
+# print(add_user('billybob2','billybobrules'))
+# print(add_user('billybob3','billybobrules'))
+# add_space('billybob3')
+# add_space('billybob3')
+# print(top_spaces())
+# creationism()
+# government_drone()

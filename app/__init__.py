@@ -4,15 +4,10 @@ from tools import db
 from random import randrange
 import json
 
-# importing blueprints
-# from routes.home import home_bp
 
-app = Flask(__name__)#ls, static_url_path = '/static')
-
-# registering blueprints
-# app.register_blueprint(home_bp)
-
+app = Flask(__name__)
 app.secret_key = b64.base64_encode("secret key in b64 lol")
+
 
 @app.route('/', methods=['GET'])
 def home_page():
@@ -21,33 +16,38 @@ def home_page():
     else:
         return render_template('login.html')
 
-@app.route("/login", methods=['GET', 'POST'])
+@app.route("/login", methods=['GET','POST'])
 def authenticate():
-    if (request.method == "POST"):
-        if(db.login_user(request.form['username'], request.form['password'])):
-            session['username'] = request.form.get('username')
-            session['password'] = request.form.get('password')
-            return redirect('/home')
-        else:
-            return render_template('login.html', exception = "Wrong username or password")
+    if 'username' in session:
+        return redirect('/')   
+    if(db.login_user(request.form['username'], request.form['password'])):
+        session['username'] = request.form.get('username')
+        session['password'] = request.form.get('password')
+        return redirect('/')
     else:
-        if 'username' in session:
-            return redirect("/home")
-        else:
-            return render_template('login.html')
+        return render_template('login.html', exception = "Wrong username or password")
 
 @app.route("/home", methods=['GET', 'POST'])
 def home():
-    return render_template('home.html',user=session['username'],score=db.get_user_spaces(session['username']))
+    return render_template('home.html',user=session['username'], score=db.get_user_spaces(session['username']))
 
-@app.route('/register')
+@app.route('/register', methods=['GET','POST'])
 def register():
+    if (request.method == 'POST'):
+        if (request.form['password1'] == request.form['password2']):
+            if db.user_exists(request.form['username']):
+                return render_template('register.html', exception = "Username already exists")
+            db.add_user(request.form['username'], request.form['password1'])
+            return redirect('/')
+        else:
+            return render_template('register.html', exception = "Passwords do not match")
     return render_template('register.html')
 
 @app.route('/logout')
 def logout():
-    session.clear()
-    return redirect('/login')
+    if 'username' in session:
+        session.pop('username')
+    return redirect('/')
 
 @app.route('/leaderboard')
 def leaderboard():
