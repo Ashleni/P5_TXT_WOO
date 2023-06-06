@@ -65,7 +65,7 @@ def update_owner(id, newOwner, column): # column needs to be set as "owner"
             c.execute("UPDATE leaderB set connections = ? WHERE owner = ?", (loser, results[0],)) # update connections on old owner
             c.execute("UPDATE leaderB set connections = ? WHERE owner = ?", (winner, newOwner,)) # update connections on new owner
 
-    except: 
+    except:
         print("error!")
 
 def user_exists(username):
