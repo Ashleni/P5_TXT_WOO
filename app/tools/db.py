@@ -1,6 +1,7 @@
 #TXT peeps
 
 import sqlite3
+import random
 DB_FILE="database.db"
 db = sqlite3.connect(DB_FILE)
 
@@ -16,18 +17,53 @@ def creationist(): #wipe then create the leaderboard
     c.execute("CREATE TABLE IF NOT EXISTS leaderB (id TEXT, owner TEXT NOT NULL, connections INTEGER, answer INTEGER, points INTEGER)")
     db.close()
 
-def update_owner(id, newOwner, column):
+def four_by_four(): 
+    db = sqlite3.connect(DB_FILE, check_same_thread=False)
+    c = db.cursor()
+    coordinates = [0,0,0,0] # top, down, left, right
+    availability = ["C", "A", "C", "A"] 
+    try:
+        for i in range(16):
+
+            if coordinates[3] == 1:
+                availability[2] = "A" # make left available when right first increments 
+            if coordinates[3] == 3:
+                availability[3] = "C" # make right unavailable when right-most
+
+            if (coordinates[3] > 3):
+                coordinates[3] = 0 # reset right coordinates
+                availability[2] = "C" # make left unavailable when left-most 
+                availability[3] = "A" # make right available when left-most 
+                coordinates[1] += 1 # increment down coordinates
+                if coordinates[1] == 1:
+                    availability[0] = "A" # make top available when down first increments 
+                if coordinates[1] == 3:
+                    availability[1] = "C" # make down unavailable when downmost
+            id = availability[0] + coordinates[0] + " " + availability[1] + coordinates[1] + " " + availability[2] + coordinates[2] + " " + availability[3] + coordinates[3]
+            rand = random.randint(1,52)
+            c.execute("INSERT into leaderB VALUES(?,?,?,?,?)", (id, "Proletariat", 0, rand, 100))
+            coordinates[3] += 1 # increment right 
+    except:
+        print("error!")
+
+def creationism():
+    creationist()
+    four_by_four()
+    print("success!!")
+
+def update_owner(id, newOwner, column): # column needs to be set as "owner"
     try:
         db = sqlite3.connect(DB_FILE, check_same_thread=False)
         c = db.cursor()
         if (column == "owner"):
-            results = e.execute() # select new owner connections
-            results = e.execute("SELECT owner, connections from leaderB WHERE id = ?", (id,)).fetchall()
+            results_0 = e.execute("SELECT connections from leaderB WHERE owner = ?", (newOwner,)).fetchall() # select new owner connections
+            results = e.execute("SELECT owner, connections from leaderB WHERE id = ?", (id,)).fetchall() # select old owner connections
             print(results)
-            results = results[1] - 1
-            c.execute("UPDATE leaderB set connections = ? WHERE owner = ?". (results[1], results[0]))
-            c.execute("UPDATE leaderB SET owner = ? WHERE id = ?", (newOwner, id,))
-            c.execute("UPDATE leaderB connections ")
+            loser = results[1] - 1
+            winner = results_0[0] + 1
+            c.execute("UPDATE leaderB SET owner = ? WHERE id = ?", (newOwner, id,)) # update node to new owner 
+            c.execute("UPDATE leaderB set connections = ? WHERE owner = ?", (loser, results[0],)) # update connections on old owner
+            c.execute("UPDATE leaderB set connections = ? WHERE owner = ?", (winner, newOwner,)) # update connections on new owner
 
     except: 
         print("error!")
@@ -106,5 +142,5 @@ print(add_user('billybob2','billybobrules'))
 print(add_user('billybob3','billybobrules'))
 add_space('billybob3')
 add_space('billybob3')
-
+creationism()
 print(top_spaces())
