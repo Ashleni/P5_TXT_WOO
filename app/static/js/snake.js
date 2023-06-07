@@ -30,8 +30,6 @@ for (var i = 0; i < x; i++)
 box_height=c.height/20;
 
 
-a[1][3]=1
-a[5][5]=1
 
 ctx.beginPath();
 ctx.fillStyle = "green";
@@ -53,12 +51,38 @@ var wipeCanvas = () =>{
   }
 }
 
+size=5;
+x_change = 1;
+y_change = 0;
+
+x_pos=1;
+y_pos=3;
+
 var drawBoard = function() {
+  wipeCanvas();
   for (var i = 1; i < x-1; i++)
   	 {
        for (var j = 1; j < x-1; j++)
        	 {
-           if(a[i][j]===1){
+           if(a[i][j]>0){
+            a[i][j]++;
+           }
+
+           if(a[i][j]>size){
+            a[i][j]=0;
+           }
+       	 }
+  	 }
+
+     x_pos=x_pos+x_change;
+     y_pos=y_pos+y_change;
+     a[x_pos][y_pos]=1;
+
+     for (var i = 1; i < x-1; i++)
+  	 {
+       for (var j = 1; j < x-1; j++)
+       	 {
+           if(a[i][j]>0){
              console.log()
              ctx.beginPath();
              ctx.fillStyle = "green";
@@ -67,28 +91,55 @@ var drawBoard = function() {
            }
        	 }
   	 }
+  console.log(a);
 }
-x_change = 1
-y_change = 0
 
-var drawDVD = () => {
+spee=10;
+
+var drawSnake = () => {
     //clear
-    wipeCanvas();
-    a[1+x_change][3+y_change]=0
-    x_change++;
-    a[1+x_change][3+y_change]=1
-    drawBoard();
-    window.cancelAnimationFrame(requestID);
-    requestID = window.requestAnimationFrame(drawDVD);
-}
+    setTimeout(function () { 
+      drawBoard();
+      window.cancelAnimationFrame(requestID);
+      requestID = window.requestAnimationFrame(drawSnake);
+    }, 1000/spee)
+  }
+    
 
 //var stopIt = function
 var stopIt = () => {
     window.cancelAnimationFrame(requestID);
 }
 
+document.addEventListener('keydown', (event) => {
+  var name = event.key;
+  var code = event.code;
+  console.log(name)
+
+  if (name === 'w'){
+      
+      y_change=0
+      x_change=-1
+  }
+
+  if (name === 's'){
+      y_change=0
+      x_change=1
+  }
+  
+  if (name === 'd'){
+      y_change=1
+      x_change=0
+  }
+
+  if (name === 'a'){
+      y_change=-1
+      x_change=0
+  }
+  
+}, false);
 
 var startButton = document.getElementById("start");
-startButton.addEventListener( "click", drawDVD);
+startButton.addEventListener( "click", drawSnake);
 
 console.log(a);
