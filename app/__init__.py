@@ -112,6 +112,8 @@ def guess():
         session['guess_number']=randrange(10)
         session['guess_attempts']=0
     return render_template('guess.html')
+    
+@app.route('/card')
 
 if __name__ == '__main__':
 	app.debug = True

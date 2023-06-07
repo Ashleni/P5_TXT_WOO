@@ -150,6 +150,7 @@ def top_spaces():
     results = c.execute("SELECT username, spaces FROM authentication ORDER BY spaces DESC").fetchall()
     return results
 
+creationism()
 # wipe_db()
 # print(add_user('billybob','billybobrules'))
 # print(login_user('billybob','billybobrules'))
