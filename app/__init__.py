@@ -106,7 +106,7 @@ def guess():
                 if (session['guess_attempts']>=5):
                     session['guess_number']=randrange(10)
                     session['guess_attempts']=0
-                    return render_template('guess.html', right_or_wrong='Number Reset')
+                    return render_template('guess.html', right_or_wrong='Number Reset. The number was ' + str(session['guess_number']) + '!')
                 return render_template('guess.html', right_or_wrong='Not Coolio you guessed wrong!', attempts_message=message)
     else:
         session['guess_number']=randrange(10)
