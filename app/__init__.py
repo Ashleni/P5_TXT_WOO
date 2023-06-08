@@ -19,7 +19,7 @@ def home_page():
 @app.route("/login", methods=['GET','POST'])
 def authenticate():
     if 'username' in session:
-        return redirect('/')   
+        return redirect('/')
     if(db.login_user(request.form['username'], request.form['password'])):
         session['username'] = request.form.get('username')
         session['password'] = request.form.get('password')
@@ -112,8 +112,16 @@ def guess():
         session['guess_number']=randrange(10)
         session['guess_attempts']=0
     return render_template('guess.html')
-    
-@app.route('/card')
+
+@app.route('/snake',methods=['GET', 'POST'])
+def snake():
+    message=''
+    if request.method == 'POST':
+        print(request.form['snakeScore'])
+        score=request.form['snakeScore']
+        db.add_spaces(session['username'],int(score))
+        message="You get this score: " + score
+    return render_template('snake.html',score_Message=message)
 
 if __name__ == '__main__':
 	app.debug = True

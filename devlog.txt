@@ -22,10 +22,14 @@ ShreyaR, DanielH, JustinM -- 6/2/23 9:00
 --------------------------------------------------------------
 design doc feedback:
 Women in Stem!:
-- achievement system is very confusing! clear explanations and 
+- achievement system is very confusing! clear explanations and
 diagrams needed.
 - grammar and formatting issues...
 GamesMathCool:
 - specify number of cards each player starts with
 - site maps fixes
 - specify how rigged a game will be
+==============================================================
+JustinM -- 6/8/23 12:00
+--------------------------------------------------------------
+  Added snake

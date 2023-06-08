@@ -25,8 +25,22 @@
     </canvas>
   </div>
 
+ </ul>
   <button id="start">start</button>
-  <button id="buttonClear">wipe</button>
+
+  <ul>
+    <li id='up'>Up: w</li>
+    <li id='left'>Left: a</li>
+    <li id='down'>Down: s</li>
+    <li id='right'>Right: d</li>
+  </ul>
+
+  <a href='/home'> GO HOME </a>
+  <p id='score'>{{score_Message}}</p>
+
+  <form id = 'snakeForm' action= "/snake" method="POST">
+    <input type="hidden" id="snakeInput" name="snakeScore">
+  </form>
 
   <script src="../static/js/snake.js"></script>
 
