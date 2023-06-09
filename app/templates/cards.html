@@ -1,0 +1,63 @@
+<html>
+
+  <head>
+    <title> CARDS PAGE </title>
+    <style>
+        .buttons{
+
+        }
+        .center{
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            height: 100%;
+        }
+        .text-box{
+            color: aliceblue;
+            position: absolute;
+            top: 20;
+            margin-left: auto;
+            margin-right: auto;
+            left: 0;
+            right: 0;
+            z-index: 1;
+            width: 270px;
+            height: 180px;
+            background-color: black;
+            border: 3px solid white;
+            outline: 2px solid white;
+            outline-offset: 5px;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  </head>
+
+  <body style="font-family: 'VT323', monospace; font-size: 20px; background-color: black;">
+    <img src= {{ url_for( 'static', filename = 'assets/' + image) }} alt="" class="center">
+    <div class="text-box container" style="width: 570px;">
+        <div class="row" style="height: 60px; padding: 5px; color: rgb(225, 152, 152);">
+            <a> The Brotherhood of Free Association: </a>
+        </div>
+        <div class="row justify-content-center align-middle" style="height: 60px; padding: 0px;">
+            "Does one play?"
+        </div>
+        <div class="row" style="height: 60px;">
+            <div class="col d-flex justify-content-center buttons">
+                <form>
+                    <input type="submit" value="One Dost Play">
+                </form>
+            </div>
+            <div class="col d-flex justify-content-center buttons">
+                <form action="/leaderboard">
+                    <input type="submit" value="Run Away">
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+
+</html>

@@ -1,8 +1,9 @@
 from flask import Flask, render_template, session, request, redirect
 from tools import b64
 from tools import db
-from random import randrange
+from random import randrange, choice
 import json
+import os
 
 # importing blueprints
 # from routes.home import home_bp
@@ -92,6 +93,13 @@ def upload_tokens(amount):
 def games():
     return render_template('games.html')
 
+@app.route('/cards')
+def cards():
+    for root, dirs, files in os.walk("./static/assets/"):
+        for name in files:
+            print(os.path.join(root, name))
+    return render_template('cards.html', image = choice(["image_3Gc6ulsB_1686153675740_raw.jpg", "image_m7cPFtd3_1686153472054_raw.jpg", "image_vU4XFDUJ_1686153544980_raw.jpg"]))
+
 @app.route('/guess',methods=['GET', 'POST'])
 def guess():
     if request.method == 'GET':
@@ -116,6 +124,9 @@ def guess():
                 session['guess_attempts']=0
                 session['guess_number']=randrange(10)
                 db.add_space(session['username'])
+                db.add_tokens(session['username'], 1)
+                results = db.get_tokens(session['username'])
+                print("POINT ON ATTENTION: " + results)
                 return render_template('guess.html', right_or_wrong='Coolio you guessed right!', factory = session['node_in_play'])
             else:
                 session['guess_attempts']+=1
