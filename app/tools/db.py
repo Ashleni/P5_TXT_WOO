@@ -22,7 +22,7 @@ def creationist(): #wipe then create the leaderboard
     db.commit()
     db.close()
 
-def four_by_four(): 
+def four_by_four():
     db = sqlite3.connect(DB_FILE, check_same_thread=False)
     c = db.cursor()
     res = requests.get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
@@ -32,20 +32,20 @@ def four_by_four():
     else:
         print ("error")
     coordinates = [0,0,0,0] # top, down, left, right
-    availability = ["C", "A", "C", "A"] 
+    availability = ["C", "A", "C", "A"]
     for i in range(16):
         if coordinates[3] == 1:
-            availability[2] = "A" # make left available when right first increments 
+            availability[2] = "A" # make left available when right first increments
         if coordinates[3] == 3:
             availability[3] = "C" # make right unavailable when right-most
 
         if (coordinates[3] > 3):
             coordinates[3] = 0 # reset right coordinates
-            availability[2] = "C" # make left unavailable when left-most 
-            availability[3] = "A" # make right available when left-most 
+            availability[2] = "C" # make left unavailable when left-most
+            availability[3] = "A" # make right available when left-most
             coordinates[1] += 1 # increment down coordinates
             if coordinates[1] == 1:
-                availability[0] = "A" # make top available when down first increments 
+                availability[0] = "A" # make top available when down first increments
             if coordinates[1] == 3:
                 availability[1] = "C" # make down unavailable when downmost
         id = f"{availability[0]}{coordinates[0]} {availability[1]}{coordinates[1]} {availability[2]}{coordinates[2]} {availability[3]}{coordinates[3]}"
@@ -63,7 +63,7 @@ def four_by_four():
         c.execute("INSERT into leaderB VALUES(?,?,?,?,?,?)", (id, "Proletariat", 16, rand, 100, image))
         results = c.execute("SELECT id from leaderB").fetchall()
         # print(results)
-        coordinates[3] += 1 # increment right 
+        coordinates[3] += 1 # increment right
     db.commit()
     db.close()
 
@@ -75,14 +75,14 @@ def creationism(): # wipeout and make a clean 4 by 4 grid of unclaimed nodes
 def government_drone(): # return all node ids
     db = sqlite3.connect(DB_FILE, check_same_thread=False)
     c = db.cursor()
-    results = c.execute("SELECT id from leaderB").fetchall()  
-    db.close();  
+    results = c.execute("SELECT id from leaderB").fetchall()
+    db.close();
     return results
 
 def alien_spaceship(arr):
     db = sqlite3.connect(DB_FILE, check_same_thread=False)
     c = db.cursor()
-    results = c.execute("SELECT * from leaderB WHERE id = ?", (arr,)).fetchall()    
+    results = c.execute("SELECT * from leaderB WHERE id = ?", (arr,)).fetchall()
     db.close()
     return results
 
@@ -99,7 +99,7 @@ def update_owner(id, newOwner, column): # column needs to be set as "owner"
             # print(results)
             loser = results[1] - 1
             winner = results_0[0] + 1
-            c.execute("UPDATE leaderB SET owner = ? WHERE id = ?", (newOwner, id,)) # update node to new owner 
+            c.execute("UPDATE leaderB SET owner = ? WHERE id = ?", (newOwner, id,)) # update node to new owner
             c.execute("UPDATE leaderB set connections = ? WHERE owner = ?", (loser, results[0],)) # update connections on old owner
             c.execute("UPDATE leaderB set connections = ? WHERE owner = ?", (winner, newOwner,)) # update connections on new owner
         db.commit()
@@ -159,6 +159,12 @@ def add_tokens(username, amount):
     db = sqlite3.connect(DB_FILE, check_same_thread=False)
     c = db.cursor()
     c.execute("UPDATE authentication SET token = token + ? WHERE username = ?", (amount, username))
+
+def add_spaces(username,num):
+    user_spaces=get_user_spaces(username)
+    db = sqlite3.connect(DB_FILE, check_same_thread=False)
+    c = db.cursor()
+    c.execute("UPDATE authentication SET spaces = ? WHERE username = ?", (user_spaces+num, username))
     db.commit()
     db.close()
     return True
@@ -190,15 +196,16 @@ def top_spaces():
     results = c.execute("SELECT username, spaces FROM authentication ORDER BY spaces DESC").fetchall()
     return results
 
-wipe_db()
-print(add_user('billybob','billybobrules'))
-print(login_user('billybob','billybobrules'))
-print(get_user_spaces('billybob'))
-add_space('billybob')
-print(add_user('billybob2','billybobrules'))
-print(add_user('billybob3','billybobrules'))
-add_space('billybob3')
-add_space('billybob3')
-print(top_spaces())
 creationism()
-government_drone()
+# wipe_db()
+# print(add_user('billybob','billybobrules'))
+# print(login_user('billybob','billybobrules'))
+# print(get_user_spaces('billybob'))
+# add_space('billybob')
+# print(add_user('billybob2','billybobrules'))
+# print(add_user('billybob3','billybobrules'))
+# add_space('billybob3')
+# add_space('billybob3')
+# print(top_spaces())
+# creationism()
+# government_drone()
