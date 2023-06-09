@@ -18,7 +18,8 @@ var nodes_setup = () => {
             console.log(error);
         })
 }
-
+var identification = document.getElementById('ide')
+var current_id_official = 'C0 C0 C0 C0'
 var current_id = document.getElementById('id')
 var current_owner = document.getElementById('owner')
 var current_connections = document.getElementById('connections')
@@ -31,12 +32,14 @@ var get_cash_fast = (arr) => {
             return response.json();
         }).then((res) => {
             console.log(res);
+            current_id_official =  res[0];
             current_id.innerHTML = "Factory: " + res[0];
             current_owner.innerHTML = "Owner: " + res[1];
             current_connections.innerHTML = "Connections: " + res[2];
             current_answer.innerHTML = "Answer: " + res[3];
             current_points.innerHTML = "Points: " + res[4];
             form.style.opacity = '1';
+            identification.setAttribute('value', current_id_official)
         }).catch((error) => {
             console.log(error);
         })
@@ -68,6 +71,7 @@ var draw_nodes = (arr) => {
 var comparison_search = () => {
 
 }
+
 c.addEventListener("click", (e) => {
     var mouseX = e.offsetX;
     var mouseY = e.offsetY;
@@ -89,9 +93,12 @@ c.addEventListener("click", (e) => {
         }
     }
     console.log(search[3]  + " " + search[1])
-    if (search_id > 0){
+    if (search_id > -1){
         get_cash_fast(loading_nodes[search_id])
     }
 })
 
+// var play = document.getElementById('btn')
+// play.addEventListener('click', (e) => {
+// })
 nodes_setup()

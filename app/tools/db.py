@@ -2,8 +2,12 @@
 
 import sqlite3
 import random
+import requests
+import json
+
 DB_FILE="database.db"
 db = sqlite3.connect(DB_FILE)
+code = "000000000000"
 
 def wipe_db():
     db = sqlite3.connect(DB_FILE, check_same_thread=False) #open if file exists, otherwise create
@@ -14,13 +18,19 @@ def creationist(): #wipe then create the leaderboard
     db = sqlite3.connect(DB_FILE, check_same_thread=False)
     c = db.cursor()
     c.execute("DROP TABLE if exists leaderB")
-    c.execute("CREATE TABLE IF NOT EXISTS leaderB (id TEXT, owner TEXT NOT NULL, connections INTEGER, answer INTEGER, points INTEGER)")
+    c.execute("CREATE TABLE IF NOT EXISTS leaderB (id TEXT, owner TEXT NOT NULL, connections INTEGER, answer INTEGER, points INTEGE, imagery TEXT)")
     db.commit()
     db.close()
 
 def four_by_four(): 
     db = sqlite3.connect(DB_FILE, check_same_thread=False)
     c = db.cursor()
+    res = requests.get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
+    response = json.loads(res.text)
+    if (response['success']):
+        code = response['deck_id']
+    else:
+        print ("error")
     coordinates = [0,0,0,0] # top, down, left, right
     availability = ["C", "A", "C", "A"] 
     for i in range(16):
@@ -41,7 +51,16 @@ def four_by_four():
         id = f"{availability[0]}{coordinates[0]} {availability[1]}{coordinates[1]} {availability[2]}{coordinates[2]} {availability[3]}{coordinates[3]}"
         rand = random.randint(1,52)
         # print (id)
-        c.execute("INSERT into leaderB VALUES(?,?,?,?,?)", (id, "Proletariat", 16, rand, 100))
+        res_1 = requests.get(f'https://deckofcardsapi.com/api/deck/{code}/draw/?count=1')
+        response_1 = json.loads(res_1.text)
+        if (response_1['success']):
+            cards = response_1['cards'][0]
+            rand = cards['value'] + ' of ' + cards['suit']
+            image = cards['image']
+            reloaded = requests.get(f'https://deckofcardsapi.com/api/deck/{code}/return/')
+        else:
+            rand = 'government subsidized'
+        c.execute("INSERT into leaderB VALUES(?,?,?,?,?,?)", (id, "Proletariat", 16, rand, 100, image))
         results = c.execute("SELECT id from leaderB").fetchall()
         # print(results)
         coordinates[3] += 1 # increment right 
@@ -73,6 +92,9 @@ def update_owner(id, newOwner, column): # column needs to be set as "owner"
         c = db.cursor()
         if (column == "owner"):
             results_0 = e.execute("SELECT connections from leaderB WHERE owner = ?", (newOwner,)).fetchall() # select new owner connections
+            print ("object: " + results_0)
+            if results_0[0] == '':
+                results_0 = [0]
             results = e.execute("SELECT owner, connections from leaderB WHERE id = ?", (id,)).fetchall() # select old owner connections
             # print(results)
             loser = results[1] - 1
@@ -88,7 +110,7 @@ def update_owner(id, newOwner, column): # column needs to be set as "owner"
 def user_exists(username):
     db = sqlite3.connect(DB_FILE, check_same_thread=False)
     c = db.cursor()
-    c.execute("CREATE TABLE IF NOT EXISTS authentication (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT NOT NULL, spaces INTEGER)")
+    c.execute("CREATE TABLE IF NOT EXISTS authentication (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT NOT NULL, spaces INTEGER, token INTEGER)")
     results = c.execute("SELECT username FROM authentication WHERE username = ?", (username,)).fetchall()
     db.close()
     if len(results) > 0:
@@ -102,8 +124,8 @@ def add_user(username, password):
     else:
         db = sqlite3.connect(DB_FILE, check_same_thread=False)
         c = db.cursor()
-        c.execute("CREATE TABLE IF NOT EXISTS authentication (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT NOT NULL, spaces INTEGER)")
-        c.execute("INSERT INTO authentication VALUES(?, ?, ?, ?)", (None, username, password, 0))
+        c.execute("CREATE TABLE IF NOT EXISTS authentication (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT NOT NULL, spaces INTEGER, token INTEGER)")
+        c.execute("INSERT INTO authentication VALUES(?, ?, ?, ?, ?)", (None, username, password, 0, 0,))
         db.commit()
         db.close()
         return "success"
@@ -131,6 +153,24 @@ def add_space(username):
     db.commit()
     db.close()
     return True
+
+def add_tokens(username, amount):
+    user_spaces=get_user_spaces(username)
+    db = sqlite3.connect(DB_FILE, check_same_thread=False)
+    c = db.cursor()
+    c.execute("UPDATE authentication SET token = token + ? WHERE username = ?", (amount, username))
+    db.commit()
+    db.close()
+    return True
+
+def get_tokens(username):
+    user_spaces=get_user_spaces(username)
+    db = sqlite3.connect(DB_FILE, check_same_thread=False)
+    c = db.cursor()
+    results = c.execute("SELECT token from authentication WHERE username = ?", (amount, username)).fetchall()
+    db.commit()
+    db.close()
+    return results
 
 def remove_space(username):
     user_spaces=get_user_spaces(username)

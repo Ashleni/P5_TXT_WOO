@@ -13,7 +13,7 @@
 
 
     <h3>
-      Guess da numba.
+      Guess da numba. (Deploying pinkertons against Factory {{factory}})
     </h3>
     <form action="/guess" method="post">
       <input type="text" name="user_number">
@@ -22,7 +22,14 @@
     {{right_or_wrong}} <br>
     {{attempts_message}}
     <br>
+    {% if right_or_wrong == 'Coolio you guessed right!' %}
+    <form>
+      <label for="limit">Use a token to gamble against the brotherhood of Free Association:</label>
+      <input id = 'limit' type="submit" value="Play the cards">
+    </form>
+    {% endif %}
     <a href='/home'> home </a>
+    <script src="../static/js/guess.js"></script>
   </body>
 
 </html>

@@ -66,7 +66,7 @@ def leaderboard_setup():
     else:
         return '400'
 
-@app.route('/info/<id>', methods = ['GET', 'POST'])
+@app.route('/info/<id>', methods = ['GET', 'POST']) # Get information on a node specified by id, called via fetch in leaderBoard.js
 def info(id):
     if request.method == 'GET':
         results = db.alien_spaceship(id)
@@ -78,12 +78,30 @@ def info(id):
     else:
         return '400'
 
+@app.route('/upload_tokens/<amount>', methods = ['GET', 'POST']) # Get information on a node specified by id, called via fetch in leaderBoard.js
+def upload_tokens(amount):
+    if request.method == 'GET':
+        db.add_tokens(session['username'], amount)
+        results = db.get_tokens(session['username'])
+        clean_res = results[0][0]
+        return json.dumps(clean_res)
+    else:
+        return '400'
+
 @app.route('/games')
 def games():
     return render_template('games.html')
 
 @app.route('/guess',methods=['GET', 'POST'])
 def guess():
+    if request.method == 'GET':
+        if 'id' in request.args:
+            print ('Recieved node id! ' + request.args['id'])
+            session['node_in_play'] = request.args['id']
+        else:
+            return redirect('/leaderboard')
+    if 'username' not in session:
+        return redirect('/login')
     if 'guess_number' in session and 'guess_attempts' in session:
         #If form is being used
         if request.method == 'POST':
@@ -91,14 +109,14 @@ def guess():
             try:
                 user_number = int(request.form['user_number'])
             except:
-                return render_template('guess.html', right_or_wrong='Please Use a NUMBER!!!!')
+                return render_template('guess.html', right_or_wrong='Please Use a NUMBER!!!!', factory = session['node_in_play'])
 
             if (user_number == session['guess_number']):
                 #If user guesses correct number
                 session['guess_attempts']=0
                 session['guess_number']=randrange(10)
                 db.add_space(session['username'])
-                return render_template('guess.html', right_or_wrong='Coolio you guessed right!')
+                return render_template('guess.html', right_or_wrong='Coolio you guessed right!', factory = session['node_in_play'])
             else:
                 session['guess_attempts']+=1
                 message='You have '  + str(5-session['guess_attempts']) + ' attempts remaining'
@@ -106,12 +124,12 @@ def guess():
                 if (session['guess_attempts']>=5):
                     session['guess_number']=randrange(10)
                     session['guess_attempts']=0
-                    return render_template('guess.html', right_or_wrong='Number Reset')
-                return render_template('guess.html', right_or_wrong='Not Coolio you guessed wrong!', attempts_message=message)
+                    return render_template('guess.html', right_or_wrong='Number Reset', factory = session['node_in_play'])
+                return render_template('guess.html', right_or_wrong='Not Coolio you guessed wrong!', attempts_message=message, factory = session['node_in_play'])
     else:
         session['guess_number']=randrange(10)
         session['guess_attempts']=0
-    return render_template('guess.html')
+    return render_template('guess.html', factory = session['node_in_play'])
 
 if __name__ == '__main__':
 	app.debug = True
