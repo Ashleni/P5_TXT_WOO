@@ -3,12 +3,14 @@ from tools import b64
 from tools import db
 from random import randrange, choice
 import json
+import requests
 import os
 
 
 app = Flask(__name__)
 app.secret_key = b64.base64_encode("secret key in b64 lol")
 
+secret = 'lgb1ns28jzza'
 
 @app.route('/', methods=['GET'])
 def home_page():
@@ -93,12 +95,32 @@ def upload_tokens(amount):
 def games():
     return render_template('games.html')
 
-@app.route('/cards')
+@app.route('/cards', methods=['GET', 'POST'])
 def cards():
-    for root, dirs, files in os.walk("./static/assets/"):
-        for name in files:
-            print(os.path.join(root, name))
-    return render_template('cards.html', image = choice(["image_3Gc6ulsB_1686153675740_raw.jpg", "image_m7cPFtd3_1686153472054_raw.jpg", "image_vU4XFDUJ_1686153544980_raw.jpg"]))
+    if request.method == 'POST':
+        if 'click' in request.form:
+            print ("AAAA")
+            number = db.get_tokens(session['username'])
+            print(number)
+            if number > 0:
+                db.add_tokens(session['username'], -1)
+                print("BBB")
+                res = requests.get(f'https://deckofcardsapi.com/api/deck/{secret}/draw/?count=1')
+                response = json.loads(res.text)
+                print(response)
+                cards = response['cards'][0]
+                rand = cards['value'] + ' of ' + cards['suit']
+                image = cards['image']
+                res = requests.get(f'https://deckofcardsapi.com/api/deck/{secret}/return/')
+                if True:
+                    print("engage: " + session['node_in_play'])
+                    db.update_owner(session['node_in_play'], session['username'], "owner")
+                    return render_template('cards.html', image = image, text = "What have you done?", coconuts = db.get_tokens(session['username'])) 
+                else:
+                    return render_template('cards.html', image = image, text = "What are you doing?", coconuts = db.get_tokens(session['username'])) 
+            else:
+                return render_template('cards.html', image = choice(["image_3Gc6ulsB_1686153675740_raw.jpg", "image_m7cPFtd3_1686153472054_raw.jpg", "image_vU4XFDUJ_1686153544980_raw.jpg"]), text = "You have no more souls to give.", coconuts = db.get_tokens(session['username']))
+    return render_template('cards.html', image = choice(["image_3Gc6ulsB_1686153675740_raw.jpg", "image_m7cPFtd3_1686153472054_raw.jpg", "image_vU4XFDUJ_1686153544980_raw.jpg"]), text = "Dost one play?", coconuts = db.get_tokens(session['username']))
 
 @app.route('/guess',methods=['GET', 'POST'])
 def guess():
@@ -106,6 +128,7 @@ def guess():
         if 'id' in request.args:
             print ('Recieved node id! ' + request.args['id'])
             session['node_in_play'] = request.args['id']
+            session['answer_in_question'] = request.args['answy']
         else:
             return redirect('/leaderboard')
     if 'username' not in session:
@@ -126,7 +149,6 @@ def guess():
                 db.add_space(session['username'])
                 db.add_tokens(session['username'], 1)
                 results = db.get_tokens(session['username'])
-                print("POINT ON ATTENTION: " + results)
                 return render_template('guess.html', right_or_wrong='Coolio you guessed right!', factory = session['node_in_play'])
             else:
                 session['guess_attempts']+=1
@@ -152,6 +174,12 @@ def snake():
         message="You get this score: " + score
     return render_template('snake.html',score_Message=message)
 
+@app.route('/get_cards', methods=['GET', 'POST'])
+def get_cards():
+    res = requests.get('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
+    response = json.loads(res.text)
+    print(res.text)
+    return('te')
 if __name__ == '__main__':
 	app.debug = True
 	app.run()

@@ -76,7 +76,7 @@ def government_drone(): # return all node ids
     db = sqlite3.connect(DB_FILE, check_same_thread=False)
     c = db.cursor()
     results = c.execute("SELECT id from leaderB").fetchall()
-    db.close();
+    db.close()
     return results
 
 def alien_spaceship(arr):
@@ -87,25 +87,25 @@ def alien_spaceship(arr):
     return results
 
 def update_owner(id, newOwner, column): # column needs to be set as "owner"
-    try:
-        db = sqlite3.connect(DB_FILE, check_same_thread=False)
-        c = db.cursor()
-        if (column == "owner"):
-            results_0 = e.execute("SELECT connections from leaderB WHERE owner = ?", (newOwner,)).fetchall() # select new owner connections
-            print ("object: " + results_0)
-            if results_0[0] == '':
-                results_0 = [0]
-            results = e.execute("SELECT owner, connections from leaderB WHERE id = ?", (id,)).fetchall() # select old owner connections
-            # print(results)
-            loser = results[1] - 1
-            winner = results_0[0] + 1
-            c.execute("UPDATE leaderB SET owner = ? WHERE id = ?", (newOwner, id,)) # update node to new owner
-            c.execute("UPDATE leaderB set connections = ? WHERE owner = ?", (loser, results[0],)) # update connections on old owner
-            c.execute("UPDATE leaderB set connections = ? WHERE owner = ?", (winner, newOwner,)) # update connections on new owner
-        db.commit()
-        db.close()
-    except:
-        print("error!")
+    db = sqlite3.connect(DB_FILE, check_same_thread=False)
+    c = db.cursor()
+    if (column == "owner"):
+        results_0 = c.execute("SELECT connections from leaderB WHERE owner = ?", (newOwner,)).fetchall() # select new owner connections
+        print ("object: " + str(results_0))
+        if results_0 == []:
+            results_0 = 0
+        else:
+            results_0 = results_0[0][0]
+        results = c.execute("SELECT owner, connections from leaderB WHERE id = ?", (id,)).fetchall() # select old owner connections
+         # print(results)
+        loser = results[0][1] - 1
+        winner = results_0 + 1
+        c.execute("UPDATE leaderB SET owner = ? WHERE id = ?", (newOwner, id,)) # update node to new owner
+        c.execute("UPDATE leaderB set connections = ? WHERE owner = ?", (loser, results[0][0],)) # update connections on old owner
+        c.execute("UPDATE leaderB set connections = ? WHERE owner = ?", (winner, newOwner,)) # update connections on new owner
+    db.commit()
+    db.close()
+
 
 def user_exists(username):
     db = sqlite3.connect(DB_FILE, check_same_thread=False)
@@ -159,6 +159,9 @@ def add_tokens(username, amount):
     db = sqlite3.connect(DB_FILE, check_same_thread=False)
     c = db.cursor()
     c.execute("UPDATE authentication SET token = token + ? WHERE username = ?", (amount, username))
+    db.commit()
+    db.close()
+    return True
 
 def add_spaces(username,num):
     user_spaces=get_user_spaces(username)
@@ -173,10 +176,10 @@ def get_tokens(username):
     user_spaces=get_user_spaces(username)
     db = sqlite3.connect(DB_FILE, check_same_thread=False)
     c = db.cursor()
-    results = c.execute("SELECT token from authentication WHERE username = ?", (amount, username)).fetchall()
+    results = c.execute("SELECT token from authentication WHERE username = ?", (username,)).fetchall()
     db.commit()
     db.close()
-    return results
+    return results[0][0]
 
 def remove_space(username):
     user_spaces=get_user_spaces(username)

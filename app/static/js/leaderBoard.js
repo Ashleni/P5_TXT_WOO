@@ -19,7 +19,9 @@ var nodes_setup = () => {
         })
 }
 var identification = document.getElementById('ide')
+var answy = document.getElementById('answy')
 var current_id_official = 'C0 C0 C0 C0'
+var current_answer_official = 'K0'
 var current_id = document.getElementById('id')
 var current_owner = document.getElementById('owner')
 var current_connections = document.getElementById('connections')
@@ -37,9 +39,11 @@ var get_cash_fast = (arr) => {
             current_owner.innerHTML = "Owner: " + res[1];
             current_connections.innerHTML = "Connections: " + res[2];
             current_answer.innerHTML = "Answer: " + res[3];
+            current_answer_official = res[3];
             current_points.innerHTML = "Points: " + res[4];
             form.style.opacity = '1';
             identification.setAttribute('value', current_id_official)
+            answy.setAttribute('value', current_answer_official)
         }).catch((error) => {
             console.log(error);
         })
