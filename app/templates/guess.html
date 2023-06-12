@@ -27,16 +27,27 @@
  
 	
     <h2>
-      Guess da numba. (Deploying pinkertons against Factory {{factory}})
+      {% if not fakeness%}
+        Guess da numba. (Deploying pinkertons against Factory {{factory}})
+      {% else %}
+        Guess da numba.
+      {% endif %}
     </h2>
+    {% if not fakeness%}
     <form action="/guess" method="post">
       <input type="text" name="user_number">
       <input type="submit" class="btn btn-danger" name="sub1">
     </form>
+    {% else %}
+    <form action="/guess_fake" method="post">
+      <input type="text" name="user_number">
+      <input type="submit" class="btn btn-danger" name="sub1">
+    </form>
+    {% endif %}
     <p>{{right_or_wrong}} <br>
     {{attempts_message}} </p>
     <br>
-    {% if right_or_wrong == 'Coolio you guessed right!' %}
+    {% if right_or_wrong == 'Coolio you guessed right!' and not fakeness%}
     <form action="/cards">
       <label for="limit">Use a token to gamble against the brotherhood of Free Association:</label>
       <input id = 'limit' type="submit" value="Play the cards">

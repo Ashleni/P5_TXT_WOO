@@ -22,12 +22,16 @@ var identification = document.getElementById('ide')
 var answy = document.getElementById('answy')
 var current_id_official = 'C0 C0 C0 C0'
 var current_answer_official = 'K0'
+
+
+
 var current_id = document.getElementById('id')
 var current_owner = document.getElementById('owner')
 var current_connections = document.getElementById('connections')
 var current_points = document.getElementById('points')
 var current_answer = document.getElementById('answer')
 var form = document.getElementById("form");
+var user = document.getElementById("user");
 var get_cash_fast = (arr) => {
     fetch("/info/" + arr)
         .then((response) => {
@@ -41,7 +45,11 @@ var get_cash_fast = (arr) => {
             current_answer.innerHTML = "Answer: " + res[3];
             current_answer_official = res[3];
             current_points.innerHTML = "Points: " + res[4];
-            form.style.opacity = '1';
+            if (res[1] != user.value){
+                form.style.opacity = '1';
+            } else {
+                form.style.opacity = '0';
+            }
             identification.setAttribute('value', current_id_official)
             answy.setAttribute('value', current_answer_official)
         }).catch((error) => {
