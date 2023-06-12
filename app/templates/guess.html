@@ -6,37 +6,35 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/css/guess.css">
   </head>
 
   <body>
+  <!--
   	<nav class="navbar navbar-default">
 	 <div class="container-fluid">
 	  <div class="navbar-header">
        <a class="navbar-brand" href="#">TXT</a>
       </div>
       <ul class="nav navbar-nav">
-	    <!--<li class="active"><a href='/home'></li>-->
 		<li><a href='/home'> Home </a> </li>
 		<li><a href='/logout'> logout </a> </li>
 		<li><a href='/leaderboard'> leaderboard </a> </li>
 	  </ul>
 	 </div>
 	</nav>
-  
-    <h1>
-      Team TXT
-    </h1>
-
-
-    <h3>
+  -->
+ 
+	
+    <h2>
       Guess da numba. (Deploying pinkertons against Factory {{factory}})
-    </h3>
+    </h2>
     <form action="/guess" method="post">
       <input type="text" name="user_number">
-      <input type="submit" name="sub1">
+      <input type="submit" class="btn btn-danger" name="sub1">
     </form>
-    {{right_or_wrong}} <br>
-    {{attempts_message}}
+    <p>{{right_or_wrong}} <br>
+    {{attempts_message}} </p>
     <br>
     {% if right_or_wrong == 'Coolio you guessed right!' %}
     <form action="/cards">
@@ -44,7 +42,16 @@
       <input id = 'limit' type="submit" value="Play the cards">
     </form>
     {% endif %}
-    <a href='/home'> home </a>
+    
+    <ul class= 'bar'>
+		<li><a href='/home'> home </a> </li>
+		<li><a href='/logout'> logout </a> </li>
+		<li><a href='/leaderboard'> leaderboard </a> </li>
+		<li><a href='/snake'> snake </a> </li>
+	</ul>
+	<br>
+	
+	
     <script src="../static/js/guess.js"></script>
   </body>
 
