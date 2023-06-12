@@ -235,6 +235,15 @@ def get_cards():
     response = json.loads(res.text)
     print(res.text)
     return('te')
+
+@app.route('slapjack', methods=['GET', 'POST'])
+def slapjack():
+    new_deck = requests.get('https://deckofcardsapi.com/api/deck/new/')
+    temp_dict = json.loads(new_deck.text)
+    deck_id = temp_dict['deck_id']
+    draw_a_card = requests.get(f'https://deckofcardsapi.com/api/deck/{deck_id}/draw/?count=1')
+    return('')
+
 if __name__ == '__main__':
 	app.debug = True
 	app.run()
