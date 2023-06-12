@@ -112,7 +112,7 @@ def cards():
                 rand = cards['value'] + ' of ' + cards['suit']
                 image = cards['image']
                 res = requests.get(f'https://deckofcardsapi.com/api/deck/{secret}/return/')
-                if True:
+                if rand == session['answer_in_question']:
                     print("engage: " + session['node_in_play'])
                     db.update_owner(session['node_in_play'], session['username'], "owner")
                     return render_template('cards.html', image = image, text = "What have you done?", coconuts = db.get_tokens(session['username'])) 
