@@ -5,16 +5,22 @@
 
   <head>
     <title>Register Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="/static/css/register.css">
   </head>
 
   <body>
     <h1>
       Create New account
-      <hr>
+      <br>
+	</h1>
+	<div class="container">
       <h2>
         {{exception}}
       </h2>
-    </h1>
+    
 
       <form action= "/register" method="POST">
         <p> Username </p>
@@ -24,14 +30,15 @@
       <p> Retype password</p>
       <input type="password" name="password2" placeholder= "Confirm your password" required>
 
-        <input title = "Submit" type="submit" name="sub1">
+        <input title = "Submit" type="submit" name="sub1" class="btn btn-danger">
       </form>
 
     <h2>
       Already have an account?
     </h2>
     <form action ="/">
-      <input title = "Login" type="submit" value="Login"/>
+      <input title = "Login" type="submit" class="btn btn-danger" value="Login"/>
     </form>
+	</div>
   <body>
 </html>

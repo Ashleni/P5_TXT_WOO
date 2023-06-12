@@ -1,8 +1,3 @@
-// Team Hair Investment Uncles :: Daniel He, Justin Mohabir, Sir, Alfred
-// SoftDev pd2
-// K30-- JS Paint
-// 2023-04-24m
-// --------------------------------------------------
 
 var c = document.getElementById("slate");
 var ctx = c.getContext("2d");
@@ -21,6 +16,7 @@ const box_height=c.height/20;
 
 var wipeCanvas = () =>{
   ctx.clearRect(0, 0, 10000, 10000);
+  ctx.strokeStyle = "white";
   for (var i = 0; i < x; i++) {
     ctx.beginPath();
     ctx.moveTo(0+i*box_height, 0);

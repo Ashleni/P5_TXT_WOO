@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!--
-   Team Hair Investment Uncles :: Daniel He, Justin Mohabir, Sir, Alfred
-   SoftDev pd2
-   K30 - JS Paint
-   2023-04-24m
-  -->
 
   <head>
     <meta charset="utf-8"/>
     <title>basic JS canvas work</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/snake.css">
   </head>
 
   <style>
@@ -18,6 +14,7 @@
 
   <h2> snakkkke</h2>
 
+  <div class = "snek">
   <div>
     <canvas height="600" width="600"
             id="slate">
@@ -25,18 +22,26 @@
     </canvas>
   </div>
 
- </ul>
-  <button id="start">start</button>
-
-  <ul>
+   <div class = "buton">
+  <button id="start" class="btn btn-danger" >Start</button>
+    <ul>
     <li id='up'>Up: w</li>
     <li id='left'>Left: a</li>
     <li id='down'>Down: s</li>
     <li id='right'>Right: d</li>
   </ul>
+    <p id='score'>{{score_Message}}</p>
+   </div>
+</div>
+	
+      <ul class= 'bar'>
+		<li><a href='/home'> home </a></li>
+		<li><a href='/leaderboard'> leaderboard </a> </li>
+		<li><a href='/logout'> logout </a> </li>
+	  </ul>
 
-  <a href='/home'> GO HOME </a>
-  <p id='score'>{{score_Message}}</p>
+  
+
 
   <form id = 'snakeForm' action= "/snake" method="POST">
     <input type="hidden" id="snakeInput" name="snakeScore">

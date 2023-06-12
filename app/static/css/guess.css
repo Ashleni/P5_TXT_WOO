@@ -1,0 +1,40 @@
+body {
+	/* background-image: url(/static/assets/logo.png); */
+	background-color: #000000;
+	font-family: 'Roboto Mono', monospace;
+	color: white;
+}
+
+ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+}
+
+    body > * {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+	  align-items: center;
+    }
+
+	h2 {
+	height: 40%;
+	}
+	
+	input {
+	color: black;
+	}
+
+    .bar {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+	
+	li {
+      margin-right: 30px;
+	  font-size: 30px;
+	  list-style: none;
+	}

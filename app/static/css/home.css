@@ -1,0 +1,53 @@
+body {
+	/* background-image: url(/static/assets/logo.png); */
+	background-color: #000000;
+	font-family: 'Roboto Mono', monospace;
+}
+/*
+h1 {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+}
+*/
+    html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container > * {
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    h1 {
+      font-size: 30px;
+    }
+	
+	
+ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+}
+
+li {
+      margin-right: 30px;
+	  font-size: 30px;
+}
+
+.bar {
+      text-align: center;
+}
