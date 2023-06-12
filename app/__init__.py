@@ -236,7 +236,7 @@ def get_cards():
     print(res.text)
     return('te')
 
-@app.route('slapjack', methods=['GET', 'POST'])
+@app.route('/slapjack', methods=['GET', 'POST'])
 def slapjack():
     new_deck = requests.get('https://deckofcardsapi.com/api/deck/new/')
     temp_dict = json.loads(new_deck.text)
