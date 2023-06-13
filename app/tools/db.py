@@ -57,9 +57,9 @@ def four_by_four():
             cards = response_1['cards'][0]
             rand = cards['value'] + ' of ' + cards['suit']
             image = cards['image']
-            reloaded = requests.get(f'https://deckofcardsapi.com/api/deck/{code}/return/')
         else:
             rand = 'government subsidized'
+        reloaded = requests.get(f'https://deckofcardsapi.com/api/deck/{code}/return/')
         c.execute("INSERT into leaderB VALUES(?,?,?,?,?,?)", (id, "Proletariat", 16, rand, 100, image))
         results = c.execute("SELECT id from leaderB").fetchall()
         # print(results)

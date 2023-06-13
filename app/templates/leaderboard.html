@@ -9,6 +9,7 @@
 
   <body>
     <!-- {{results}} -->
+    <h1>16 SQUARES of SOCIETY</h1>
     <canvas id ="canvas"></canvas>
     <div style="position: absolute; z-index: 1; border: 1px dotted red; right: 0; top:0; width: 500px;">
         <ul style="font-size: 2rem;">
@@ -18,11 +19,13 @@
             <li id = 'answer'></li>
             <li id = 'points'></li>
         </ul>
-    <form id = "form" action="/guess" method="GET" style="opacity:0; padding: 30px;">
+    <form id = "form" action="/Samantha" method="GET" style="opacity:0; padding: 30px;">
         <label for="btn">Resist the Proletarian Revolution:</label>
+        <input type="hidden" id="user" value={{user}}>
         <input id = "ide" type="hidden" name="id" value="C0 C0 C0 C0">
         <input id = "answy" type="hidden" name="answy" value="K0">
-        <input id = "btn" type="submit" class="btn btn-danger" value="Claim Private Ownership!">
+        <input id = "btn" type="submit" class="btn btn-danger" name="choice1" value="Claim Private Ownership!">
+        <input id = "btn" type="submit" class="btn btn-danger" name="choice2" value="Engage in Monetary Warfare!">
     </form>
 	<br>
 	<a href='/home'> home </a> 

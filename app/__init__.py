@@ -56,7 +56,7 @@ def logout():
 def leaderboard():
     results = db.government_drone()
     print(results)
-    return render_template('leaderboard.html', results = results)
+    return render_template('leaderboard.html', results = results, user = session['username'])
 
 @app.route('/leaderboard_setup', methods = ['GET', 'POST'])
 def leaderboard_setup():
@@ -112,7 +112,7 @@ def cards():
                 rand = cards['value'] + ' of ' + cards['suit']
                 image = cards['image']
                 res = requests.get(f'https://deckofcardsapi.com/api/deck/{secret}/return/')
-                if True:
+                if rand == session['answer_in_question']: #rand == session['answer_in_question']
                     print("engage: " + session['node_in_play'])
                     db.update_owner(session['node_in_play'], session['username'], "owner")
                     return render_template('cards.html', image = image, text = "What have you done?", coconuts = db.get_tokens(session['username'])) 
@@ -122,8 +122,8 @@ def cards():
                 return render_template('cards.html', image = choice(["image_3Gc6ulsB_1686153675740_raw.jpg", "image_m7cPFtd3_1686153472054_raw.jpg", "image_vU4XFDUJ_1686153544980_raw.jpg"]), text = "You have no more souls to give.", coconuts = db.get_tokens(session['username']))
     return render_template('cards.html', image = choice(["image_3Gc6ulsB_1686153675740_raw.jpg", "image_m7cPFtd3_1686153472054_raw.jpg", "image_vU4XFDUJ_1686153544980_raw.jpg"]), text = "Dost one play?", coconuts = db.get_tokens(session['username']))
 
-@app.route('/guess',methods=['GET', 'POST'])
-def guess():
+@app.route('/Samantha',methods=['GET', 'POST'])
+def Samantha():
     if request.method == 'GET':
         if 'id' in request.args:
             print ('Recieved node id! ' + request.args['id'])
@@ -131,6 +131,13 @@ def guess():
             session['answer_in_question'] = request.args['answy']
         else:
             return redirect('/leaderboard')
+        if 'choice1' in request.args:
+            return redirect('/guess')
+        elif 'choice2' in request.args:
+            return redirect('/snake_realness')
+
+@app.route('/guess',methods=['GET', 'POST'])
+def guess():
     if 'username' not in session:
         return redirect('/login')
     if 'guess_number' in session and 'guess_attempts' in session:
@@ -140,7 +147,7 @@ def guess():
             try:
                 user_number = int(request.form['user_number'])
             except:
-                return render_template('guess.html', right_or_wrong='Please Use a NUMBER!!!!', factory = session['node_in_play'])
+                return render_template('guess.html', right_or_wrong='Please Use a NUMBER!!!!', factory = session['node_in_play'], fakeness = False)
 
             if (user_number == session['guess_number']):
                 #If user guesses correct number
@@ -149,7 +156,7 @@ def guess():
                 db.add_space(session['username'])
                 db.add_tokens(session['username'], 1)
                 results = db.get_tokens(session['username'])
-                return render_template('guess.html', right_or_wrong='Coolio you guessed right!', factory = session['node_in_play'])
+                return render_template('guess.html', right_or_wrong='Coolio you guessed right!', factory = session['node_in_play'], fakeness = False)
             else:
                 session['guess_attempts']+=1
                 message='You have '  + str(5-session['guess_attempts']) + ' attempts remaining'
@@ -157,22 +164,70 @@ def guess():
                 if (session['guess_attempts']>=5):
                     session['guess_number']=randrange(10)
                     session['guess_attempts']=0
-                    return render_template('guess.html', right_or_wrong='Number Reset. The number was ' + str(session['guess_number']) + '!', factory = session['node_in_play'])
-                return render_template('guess.html', right_or_wrong='Not Coolio you guessed wrong!', attempts_message=message, factory = session['node_in_play'])
+                    return render_template('guess.html', right_or_wrong='Number Reset. The number was ' + str(session['guess_number']) + '!', factory = session['node_in_play'], fakeness = False)
+                return render_template('guess.html', right_or_wrong='Not Coolio you guessed wrong!', attempts_message=message, factory = session['node_in_play'], fakeness = False)
     else:
         session['guess_number']=randrange(10)
         session['guess_attempts']=0
-    return render_template('guess.html', factory = session['node_in_play'])
+    return render_template('guess.html', factory = session['node_in_play'], fakeness = False)
+
+@app.route('/guess_fake',methods=['GET', 'POST'])
+def guess_fake():
+    if 'username' not in session:
+        return redirect('/login')
+    if 'guess_number' in session and 'guess_attempts' in session:
+        #If form is being used
+        if request.method == 'POST':
+            print(session['guess_number'])
+            try:
+                user_number = int(request.form['user_number'])
+            except:
+                return render_template('guess.html', right_or_wrong='Please Use a NUMBER!!!!', factory = '', fakeness = True)
+
+            if (user_number == session['guess_number']):
+                #If user guesses correct number
+                session['guess_attempts']=0
+                session['guess_number']=randrange(10)
+                db.add_space(session['username'])
+                return render_template('guess.html', right_or_wrong='Coolio you guessed right!', factory = '', fakeness = True)
+            else:
+                session['guess_attempts']+=1
+                message='You have '  + str(5-session['guess_attempts']) + ' attempts remaining'
+                #If user runs out of attempts
+                if (session['guess_attempts']>=5):
+                    session['guess_number']=randrange(10)
+                    session['guess_attempts']=0
+                    return render_template('guess.html', right_or_wrong='Number Reset. The number was ' + str(session['guess_number']) + '!', factory = '', fakeness = True)
+                return render_template('guess.html', right_or_wrong='Not Coolio you guessed wrong!', attempts_message=message, factory = '', fakeness = True)
+    else:
+        session['guess_number']=randrange(10)
+        session['guess_attempts']=0
+    return render_template('guess.html', fakeness = True)
 
 @app.route('/snake',methods=['GET', 'POST'])
 def snake():
     message=''
+    score1 = 0
     if request.method == 'POST':
         print(request.form['snakeScore'])
         score=request.form['snakeScore']
         db.add_spaces(session['username'],int(score))
         message="You get this score: " + score
-    return render_template('snake.html',score_Message=message)
+        score1 = int(score)
+    return render_template('snake.html',score_Message=message, fakeness = True, score = score1)
+
+@app.route('/snake_realness',methods=['GET', 'POST'])
+def snake_realness():
+    message=''
+    score1 = 0
+    if request.method == 'POST':
+        print(request.form['snakeScore'])
+        score=request.form['snakeScore']
+        db.add_spaces(session['username'],int(score))
+        message=f"You have gathered {score} souls!"
+        db.add_tokens(session['username'], score)
+        score1 = int(score)
+    return render_template('snake.html',score_Message=message, fakeness = False, score = score1)
 
 @app.route('/get_cards', methods=['GET', 'POST'])
 def get_cards():
@@ -180,6 +235,15 @@ def get_cards():
     response = json.loads(res.text)
     print(res.text)
     return('te')
+
+@app.route('/slapjack', methods=['GET', 'POST'])
+def slapjack():
+    new_deck = requests.get('https://deckofcardsapi.com/api/deck/new/')
+    temp_dict = json.loads(new_deck.text)
+    deck_id = temp_dict['deck_id']
+    draw_a_card = requests.get(f'https://deckofcardsapi.com/api/deck/{deck_id}/draw/?count=1')
+    return('')
+
 if __name__ == '__main__':
 	app.debug = False
 	app.run(host='0.0.0.0')

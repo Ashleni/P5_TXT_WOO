@@ -31,21 +31,33 @@
     <li id='right'>Right: d</li>
   </ul>
     <p id='score'>{{score_Message}}</p>
+    {% if score > 0 and not fakeness%}
+    <form action="/cards">
+      <label for="limit">Use a token to gamble against the brotherhood of Free Association:</label>
+      <input id = 'limit' type="submit" value="Play the cards">
+    </form>
+    {% endif %}
    </div>
 </div>
 	
       <ul class= 'bar'>
 		<li><a href='/home'> home </a></li>
 		<li><a href='/leaderboard'> leaderboard </a> </li>
+		<li><a href='/guess_fake'> guess a number </a> </li>
 		<li><a href='/logout'> logout </a> </li>
 	  </ul>
 
   
 
-
-  <form id = 'snakeForm' action= "/snake" method="POST">
-    <input type="hidden" id="snakeInput" name="snakeScore">
-  </form>
+    {% if not fakeness%}
+    <form id = 'snakeForm' action= "/snake_realness" method="POST">
+      <input type="hidden" id="snakeInput" name="snakeScore">
+    </form>
+    {% else %}
+    <form id = 'snakeForm' action= "/snake" method="POST">
+      <input type="hidden" id="snakeInput" name="snakeScore">
+    </form>
+    {% endif %}
 
   <script src="../static/js/snake.js"></script>
 
