@@ -1,9 +1,9 @@
-from flask import Flask             #facilitate flask webserving
-from flask import render_template   #facilitate jinja templating
+#from flask import Flask             #facilitate flask webserving
+#from flask import render_template   #facilitate jinja templating
 import requests           #facilitate form submission
 from pprint import pprint
 
-app = Flask(__name__)    #create Flask object
+# app = Flask(__name__)    #create Flask object
 
 
 def randcard():

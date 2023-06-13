@@ -1,5 +1,5 @@
 from flask import Flask, render_template, session, request, redirect
-from tools import b64
+#from tools import b64
 from tools import db
 from random import randrange, choice
 import json
@@ -8,7 +8,7 @@ import os
 
 
 app = Flask(__name__)
-app.secret_key = b64.base64_encode("secret key in b64 lol")
+app.secret_key = '28ey28whshfuwgs982udg'
 
 secret = 'lgb1ns28jzza'
 
@@ -181,5 +181,5 @@ def get_cards():
     print(res.text)
     return('te')
 if __name__ == '__main__':
-	app.debug = True
-	app.run()
+	app.debug = False
+	app.run(host='0.0.0.0')
