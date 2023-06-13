@@ -6,7 +6,7 @@ import requests
 import json
 
 DB_FILE="database.db"
-db = sqlite3.connect(DB_FILE)
+#db = sqlite3.connect(DB_FILE, check_same_thread=False)
 code = "000000000000"
 
 def wipe_db():
@@ -199,7 +199,12 @@ def top_spaces():
     results = c.execute("SELECT username, spaces FROM authentication ORDER BY spaces DESC").fetchall()
     return results
 
-creationism()
+#creationism()
+try:
+    creationist()
+    four_by_four()
+except:
+    print("error with db")
 # wipe_db()
 # print(add_user('billybob','billybobrules'))
 # print(login_user('billybob','billybobrules'))
