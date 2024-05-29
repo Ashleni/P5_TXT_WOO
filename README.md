@@ -11,9 +11,9 @@
 
 
 ### Launch Codes:
- git clone 
- cd P5_TXT_WOO/app
- python3 __init__.py
+* `git clone` 
+* `cd P5_TXT_WOO/app`
+* `python3 __init__.py`
  
  
  
